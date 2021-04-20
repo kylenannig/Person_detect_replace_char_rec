@@ -1,0 +1,44 @@
+make -C build/tile0
+make -C build/tile1
+make[1]: Entering directory '/home/elecomp-xmos/Desktop/xmos/AIoT_SDK-Feb/aiot_sdk/examples/freertos/person_detection_copy_plate_recognize/build/tile0'
+make[1]: Entering directory '/home/elecomp-xmos/Desktop/xmos/AIoT_SDK-Feb/aiot_sdk/examples/freertos/person_detection_copy_plate_recognize/build/tile1'
+make[2]: Entering directory '/home/elecomp-xmos/Desktop/xmos/AIoT_SDK-Feb/aiot_sdk/examples/freertos/person_detection_copy_plate_recognize/build/tile1'
+make[2]: Entering directory '/home/elecomp-xmos/Desktop/xmos/AIoT_SDK-Feb/aiot_sdk/examples/freertos/person_detection_copy_plate_recognize/build/tile0'
+make[3]: Entering directory '/home/elecomp-xmos/Desktop/xmos/AIoT_SDK-Feb/aiot_sdk/examples/freertos/person_detection_copy_plate_recognize/build/tile1'
+make[3]: Entering directory '/home/elecomp-xmos/Desktop/xmos/AIoT_SDK-Feb/aiot_sdk/examples/freertos/person_detection_copy_plate_recognize/build/tile0'
+make[3]: Leaving directory '/home/elecomp-xmos/Desktop/xmos/AIoT_SDK-Feb/aiot_sdk/examples/freertos/person_detection_copy_plate_recognize/build/tile1'
+make[3]: Leaving directory '/home/elecomp-xmos/Desktop/xmos/AIoT_SDK-Feb/aiot_sdk/examples/freertos/person_detection_copy_plate_recognize/build/tile0'
+make[3]: Entering directory '/home/elecomp-xmos/Desktop/xmos/AIoT_SDK-Feb/aiot_sdk/examples/freertos/person_detection_copy_plate_recognize/build/tile1'
+[  1%] Building C object CMakeFiles/person_detect_1.xe.dir/app/main.c.obj
+[  1%] Building C object CMakeFiles/person_detect_1.xe.dir/home/elecomp-xmos/Desktop/xmos/AIoT_SDK-Feb/aiot_sdk/modules/rtos/drivers/spi/rtos_spi_master.c.obj
+[100%] Built target person_detect_0.xe
+[  1%] Building C object CMakeFiles/person_detect_1.xe.dir/home/elecomp-xmos/Desktop/xmos/AIoT_SDK-Feb/aiot_sdk/modules/rtos/drivers/spi/rtos_spi_master_rpc.c.obj
+make[2]: Leaving directory '/home/elecomp-xmos/Desktop/xmos/AIoT_SDK-Feb/aiot_sdk/examples/freertos/person_detection_copy_plate_recognize/build/tile0'
+[  2%] Building C object CMakeFiles/person_detect_1.xe.dir/home/elecomp-xmos/Desktop/xmos/AIoT_SDK-Feb/aiot_sdk/modules/rtos/drivers/qspi_flash/rtos_qspi_flash.c.obj
+[  2%] Building C object CMakeFiles/person_detect_1.xe.dir/home/elecomp-xmos/Desktop/xmos/AIoT_SDK-Feb/aiot_sdk/modules/rtos/drivers/swmem/rtos_swmem.c.obj
+make[1]: Leaving directory '/home/elecomp-xmos/Desktop/xmos/AIoT_SDK-Feb/aiot_sdk/examples/freertos/person_detection_copy_plate_recognize/build/tile0'
+[  2%] Building C object CMakeFiles/person_detect_1.xe.dir/home/elecomp-xmos/Desktop/xmos/AIoT_SDK-Feb/aiot_sdk/modules/rtos/drivers/qspi_flash/rtos_qspi_flash_rpc.c.obj
+[  3%] Building C object CMakeFiles/person_detect_1.xe.dir/home/elecomp-xmos/Desktop/xmos/AIoT_SDK-Feb/aiot_sdk/modules/rtos/drivers/trace/FreeRTOS/ASCII/ascii_trace.c.obj
+[  4%] Building C object CMakeFiles/person_detect_1.xe.dir/home/elecomp-xmos/Desktop/xmos/AIoT_SDK-Feb/aiot_sdk/modules/rtos/FreeRTOS/FreeRTOS-SMP-Kernel/croutine.c.obj
+[  4%] Building C object CMakeFiles/person_detect_1.xe.dir/home/elecomp-xmos/Desktop/xmos/AIoT_SDK-Feb/aiot_sdk/modules/rtos/FreeRTOS/FreeRTOS-SMP-Kernel/event_groups.c.obj
+[  5%] Building C object CMakeFiles/person_detect_1.xe.dir/home/elecomp-xmos/Desktop/xmos/AIoT_SDK-Feb/aiot_sdk/modules/rtos/FreeRTOS/FreeRTOS-SMP-Kernel/queue.c.obj
+[  5%] Building C object CMakeFiles/person_detect_1.xe.dir/home/elecomp-xmos/Desktop/xmos/AIoT_SDK-Feb/aiot_sdk/modules/rtos/FreeRTOS/FreeRTOS-SMP-Kernel/stream_buffer.c.obj
+[  5%] Building C object CMakeFiles/person_detect_1.xe.dir/home/elecomp-xmos/Desktop/xmos/AIoT_SDK-Feb/aiot_sdk/modules/rtos/FreeRTOS/FreeRTOS-SMP-Kernel/list.c.obj
+/home/elecomp-xmos/Desktop/xmos/AIoT_SDK-Feb/aiot_sdk/examples/freertos/person_detection_copy_plate_recognize/app/main.c[  6%] Building C object CMakeFiles/person_detect_1.xe.dir/home/elecomp-xmos/Desktop/xmos/AIoT_SDK-Feb/aiot_sdk/modules/rtos/FreeRTOS/FreeRTOS-SMP-Kernel/tasks.c.obj
+:146:6: error: redefinition of 'main_tile1'
+void main_tile1(chanend_t c0, chanend_t c1, chanend_t c2, chanend_t c3)
+     ^
+/home/elecomp-xmos/Desktop/xmos/AIoT_SDK-Feb/aiot_sdk/examples/freertos/person_detection_copy_plate_recognize/app/main.c:138:6: note: previous definition is here
+void main_tile1(chanend_t c0, chanend_t c1, chanend_t c2, chanend_t c3)
+     ^
+1 error generated.
+[  6%] Building C object CMakeFiles/person_detect_1.xe.dir/home/elecomp-xmos/Desktop/xmos/AIoT_SDK-Feb/aiot_sdk/modules/rtos/FreeRTOS/FreeRTOS-SMP-Kernel/timers.c.obj
+[  6%] Building C object CMakeFiles/person_detect_1.xe.dir/home/elecomp-xmos/Desktop/xmos/AIoT_SDK-Feb/aiot_sdk/modules/rtos/FreeRTOS/FreeRTOS-SMP-Kernel/portable/XCC/XCOREAI/port.c.obj
+make[3]: *** [CMakeFiles/person_detect_1.xe.dir/build.make:82: CMakeFiles/person_detect_1.xe.dir/app/main.c.obj] Error 1
+make[3]: *** Waiting for unfinished jobs....
+make[3]: Leaving directory '/home/elecomp-xmos/Desktop/xmos/AIoT_SDK-Feb/aiot_sdk/examples/freertos/person_detection_copy_plate_recognize/build/tile1'
+make[2]: *** [CMakeFiles/Makefile2:95: CMakeFiles/person_detect_1.xe.dir/all] Error 2
+make[2]: Leaving directory '/home/elecomp-xmos/Desktop/xmos/AIoT_SDK-Feb/aiot_sdk/examples/freertos/person_detection_copy_plate_recognize/build/tile1'
+make[1]: *** [Makefile:103: all] Error 2
+make[1]: Leaving directory '/home/elecomp-xmos/Desktop/xmos/AIoT_SDK-Feb/aiot_sdk/examples/freertos/person_detection_copy_plate_recognize/build/tile1'
+make: *** [Makefile:32: bin/tile1/person_detect_1.xe] Error 2
