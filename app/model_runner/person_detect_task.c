@@ -34,7 +34,7 @@ typedef struct app_task_args {
   rtos_gpio_t *gpio_ctx;
 } app_task_args_t;
 
-#define TENSOR_ARENA_SIZE (116000)
+#define TENSOR_ARENA_SIZE (250000)
 
 static void person_detect_app_task(void *args) {
   app_task_args_t *targs = (app_task_args_t *)args;
@@ -75,7 +75,6 @@ static void person_detect_app_task(void *args) {
 #endif
 
     rtos_intertile_tx(adr->intertile_ctx, adr->port, ai_img_buf, IMAGE_SIZE);
-
     output_tensor_len = rtos_intertile_rx(
         adr->intertile_ctx, adr->port, (void **)&output_tensor, portMAX_DELAY);
     rtos_printf("\nPerson score: %d\nNo person score: %d\n", output_tensor[0],
@@ -125,15 +124,17 @@ static void person_detect_task_runner(void *args) {
   model_runner_t *model_runner_ctx = NULL;
   uint8_t *tensor_arena = NULL;
   uint8_t *input_tensor;
-
+rtos_printf("print 0\n");
   tensor_arena = pvPortMalloc(TENSOR_ARENA_SIZE);
-
+rtos_printf("print 1\n");
   model_runner_init(tensor_arena, TENSOR_ARENA_SIZE);
-
+rtos_printf("print 2\n");
   req_size = model_runner_buffer_size_get();
+rtos_printf("print 3\n");
   interpreter_buf = pvPortMalloc(req_size);
+rtos_printf("print 4\n");
   model_runner_ctx = pvPortMalloc(sizeof(model_runner_t));
-
+rtos_printf("print 5\n");
   person_detect_model_runner_create(model_runner_ctx, interpreter_buf);
   if (model_runner_allocate(model_runner_ctx, person_detect_model_data) != 0) {
     rtos_printf("Invalid model provided!\n");
