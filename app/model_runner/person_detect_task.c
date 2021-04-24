@@ -62,11 +62,17 @@ static void person_detect_app_task(void *args) {
     for (int i = 0; i < (IMAGE_SIZE * 2); i++) {
       if ((i % 2)) {
         ai_img_buf[i >> 1] = img_buf[i] ;                 //replace with thresholding statement                 
-                                                                             //turnary threshold 127 that will alwasy return 00 or ff
-
+        if (img_buf[i] > 0x7F) {
+          img_buf[i] = 0xFF;
+        }
+        else {
+          img_buf[i] = 0x00;
+        }                                                    //turnary threshold 127 that will alwasy return 00 or ff
+      
       }
     }
     vPortFree(img_buf);
+
 
 #ifdef OUTPUT_IMAGE_STREAM
     taskENTER_CRITICAL();
