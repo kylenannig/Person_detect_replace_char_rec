@@ -21,7 +21,7 @@
 #include "xscope.h"
 #endif
 
-#define IMAGE_SIZE (80 * 80)
+#define IMAGE_SIZE (96 * 96)
 
 typedef struct model_runner_args {
   QueueHandle_t input_queue;
@@ -45,6 +45,7 @@ static void person_detect_app_task(void *args) {
   uint8_t *output_tensor;
   int output_tensor_len;
   uint8_t ai_img_buf[IMAGE_SIZE];
+
 
   rtos_gpio_port_id_t led_port = 0;
   uint32_t val = 0;
@@ -112,11 +113,37 @@ static void person_detect_runner_rx(void *args) {
   uint8_t *input_tensor;
   int input_tensor_len;
 
+  //Kyle: Defining new buffers for cropping
+  uint8_t crop_buf[80*80];
+
+  //Kyle: defining row and column counting variables for cropping
+  int column = 0;
+  int row = 0;
+
   while (1) {
     input_tensor_len = rtos_intertile_rx(adr->intertile_ctx, adr->port,
                                          (void **)&input_tensor, portMAX_DELAY);
+    //TODO: crop 96x96x1 to 80x80x1
+    //Loop through every element, have counter counting rows and columns (calling them rows and columns 0 through 95)
+    //k represents the row counter, j represents the column counter
+    //if in first 80x80 gets included in crop_buf
 
-//TODO: modify contents of input tensor using tripling to expand 80x80x1 to 80x80x3
+    for (int i = 0; i < (IMAGE_SIZE); i++) {
+      if (column == 96){
+      column=0;
+      row++;}
+      if(column<80 && row<80){
+        crop_buf[i]= input_tensor[i];
+      }
+      column++;
+    }
+
+    //TODO: modify contents of input tensor using tripling to expand 80x80x1 to 80x80x3
+   for (int i = 0; i < (80*80); i++) {
+     for (int j = 0; i < 3; j++){
+       input_tensor[3*i + j] = crop_buf[i];
+      }
+   }
 
     xQueueSend(q, &input_tensor, portMAX_DELAY);
   }
