@@ -140,7 +140,7 @@ static void person_detect_runner_rx(void *args) {
 
     //TODO: modify contents of input tensor using tripling to expand 80x80x1 to 80x80x3
    for (int i = 0; i < (80*80); i++) {
-     for (int j = 0; i < 3; j++){
+     for (int j = 0; j < 3; j++){
        input_tensor[3*i + j] = crop_buf[i];
       }
    }
