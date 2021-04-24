@@ -21,7 +21,7 @@
 #include "xscope.h"
 #endif
 
-#define IMAGE_SIZE (96 * 96)
+#define IMAGE_SIZE (80 * 80)
 
 typedef struct model_runner_args {
   QueueHandle_t input_queue;
@@ -61,7 +61,9 @@ static void person_detect_app_task(void *args) {
     /* img_buf[i%2] contains the values we want to pass to the ai task */
     for (int i = 0; i < (IMAGE_SIZE * 2); i++) {
       if ((i % 2)) {
-        ai_img_buf[i >> 1] = img_buf[i];
+        ai_img_buf[i >> 1] = img_buf[i] ;                 //replace with thresholding statement                 
+                                                                             //turnary threshold 127 that will alwasy return 00 or ff
+
       }
     }
     vPortFree(img_buf);
@@ -77,12 +79,12 @@ static void person_detect_app_task(void *args) {
     rtos_intertile_tx(adr->intertile_ctx, adr->port, ai_img_buf, IMAGE_SIZE);
     output_tensor_len = rtos_intertile_rx(
         adr->intertile_ctx, adr->port, (void **)&output_tensor, portMAX_DELAY);
-    rtos_printf("\nPerson score: %d\nNo person score: %d\n", output_tensor[0],
-                output_tensor[1]);
+    rtos_printf("\noutput_tensor[0](0) %d\noutput_tensor[1] (1) %d\noutput_tensor[2] (2) %d\nnoutput_tensor[3] (3) %d\nnoutput_tensor[4] (4) %d\nnoutput_tensor[5] (5) %d\nnoutput_tensor[6] (6) %d\nnoutput_tensor[7] (7) %d\nnoutput_tensor[8] (8)%d\nnoutput_tensor[9] (9) %d\nnoutput_tensor[10] (A) %d\nnoutput_tensor[11] (B) %d\nnoutput_tensor[12] (C) %d\nnoutput_tensor[13] (D) %d\nnoutput_tensor[14] (E) %d\nnoutput_tensor[15] (F) %d\nnoutput_tensor[16] (G) %d\nnoutput_tensor[17] (H) %d\nnoutput_tensor[18] (I) %d\nnoutput_tensor[19] (J) %d\nnoutput_tensor[20] (K) %d\noutput_tensor[21] (L) %d\noutput_tensor[22] (M) %d\noutput_tensor[23] (N) %d\noutput_tensor[24] (o) %d\noutput_tensor[25] (P) %d\noutput_tensor[26] (Q) %d\noutput_tensor[27] (R)%d\noutput_tensor[28] (S) %d\noutput_tensor[29] (T) %d\noutput_tensor[30] (U) %d\noutput_tensor[31] (V) %d\noutput_tensor[32] (W) %d\noutput_tensor[33] (X) %d\noutput_tensor[34] (Y) %d\noutput_tensor[35] (Z)%d\noutput_tensor[36]%d\noutput_tensor[37]%d\noutput_tensor[38]%d\n", output_tensor[0],
+                output_tensor[1], output_tensor[2], output_tensor[3], output_tensor[4], output_tensor[5], output_tensor[6], output_tensor[7], output_tensor[8], output_tensor[9], output_tensor[10], output_tensor[11], output_tensor[12], output_tensor[13], output_tensor[14], output_tensor[15], output_tensor[16], output_tensor[17], output_tensor[18], output_tensor[19], output_tensor[20], output_tensor[21], output_tensor[22], output_tensor[23], output_tensor[24], output_tensor[25], output_tensor[26], output_tensor[27], output_tensor[28], output_tensor[29], output_tensor[30], output_tensor[31], output_tensor[32], output_tensor[33], output_tensor[34], output_tensor[35], output_tensor[36], output_tensor[37],output_tensor[38]);
 
 #ifdef OUTPUT_IMAGE_STREAM
-    taskENTER_CRITICAL();
-    {
+    taskENTER_CRITICAL(); 
+    { 
       xscope_bytes(OUTPUT_TENSOR, output_tensor_len,
                    (const unsigned char *)output_tensor);
     }
@@ -107,6 +109,9 @@ static void person_detect_runner_rx(void *args) {
   while (1) {
     input_tensor_len = rtos_intertile_rx(adr->intertile_ctx, adr->port,
                                          (void **)&input_tensor, portMAX_DELAY);
+
+//TODO: modify contents of input tensor using tripling to expand 80x80x1 to 80x80x3
+
     xQueueSend(q, &input_tensor, portMAX_DELAY);
   }
 }
@@ -124,17 +129,17 @@ static void person_detect_task_runner(void *args) {
   model_runner_t *model_runner_ctx = NULL;
   uint8_t *tensor_arena = NULL;
   uint8_t *input_tensor;
-rtos_printf("print 0\n");
+//rtos_printf("print 0\n");
   tensor_arena = pvPortMalloc(TENSOR_ARENA_SIZE);
-rtos_printf("print 1\n");
+//rtos_printf("print 1\n");
   model_runner_init(tensor_arena, TENSOR_ARENA_SIZE);
-rtos_printf("print 2\n");
+//rtos_printf("print 2\n");
   req_size = model_runner_buffer_size_get();
-rtos_printf("print 3\n");
+//rtos_printf("print 3\n");
   interpreter_buf = pvPortMalloc(req_size);
-rtos_printf("print 4\n");
+//rtos_printf("print 4\n");
   model_runner_ctx = pvPortMalloc(sizeof(model_runner_t));
-rtos_printf("print 5\n");
+//rtos_printf("print 5\n");
   person_detect_model_runner_create(model_runner_ctx, interpreter_buf);
   if (model_runner_allocate(model_runner_ctx, person_detect_model_data) != 0) {
     rtos_printf("Invalid model provided!\n");
@@ -148,7 +153,7 @@ rtos_printf("print 5\n");
 
   input_buffer = model_runner_input_buffer_get(model_runner_ctx);
   input_size = model_runner_input_size_get(model_runner_ctx);
-  rtos_printf("image size if %d\n", input_size);
+  rtos_printf("image size is %d expected; %d\n", input_size, 80*80*3);
   output_buffer = model_runner_output_buffer_get(model_runner_ctx);
   output_size = model_runner_output_size_get(model_runner_ctx);
 
@@ -161,7 +166,10 @@ rtos_printf("print 5\n");
 
     rtos_printf("Running inference...\n");
     model_runner_invoke(model_runner_ctx);
-    // model_runner_profiler_summary_print(model_runner_ctx);
+    //model_runner_profiler_summary_print(model_runner_ctx);
+    
+
+
 
     rtos_intertile_tx(adr->intertile_ctx, adr->port, output_buffer,
                       output_size);
