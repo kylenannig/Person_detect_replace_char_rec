@@ -142,7 +142,7 @@ static void person_detect_runner_rx(void *args) {
       row++;}
       if(column<80 && row<80){
         crop_buf[i]= input_tensor[i];
-        rtos_printf("input-tensor %d\n", input_tensor[i]);
+        //rtos_printf("input-tensor %d\n", input_tensor[i]);
       }
       column++;
     }
@@ -156,7 +156,7 @@ static void person_detect_runner_rx(void *args) {
        //rtos_printf("i %d\n", i);
        //rtos_printf("j %d\n", j);
        //rtos_printf("crop_buf[i] %d\n", crop_buf[i]);
-       feed_to_ai[3*i + j] = crop_buf[i];
+       feed_to_ai[3*i + j] = &crop_buf[i];
        //rtos_printf("feed_to_ai[i] %d\n", feed_to_ai[3*i+j]);
       }
    }
