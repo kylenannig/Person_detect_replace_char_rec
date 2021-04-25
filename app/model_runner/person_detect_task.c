@@ -120,12 +120,12 @@ static void person_detect_runner_rx(void *args) {
   int column = 0;
   int row = 0;
 
-  //andrew test
-  int temp = 0x00;
+  //test variables
+  //int temp = 0x00;
   int test = 0;
 
   //kyle definining new arrays
-  uint8_t *feed_to_ai[80*80*3];
+  //uint8_t *feed_to_ai[80*80*3];
   uint8_t crop_buf[80*80];
 
   while (1) {
@@ -149,15 +149,12 @@ static void person_detect_runner_rx(void *args) {
 
    test = sizeof(crop_buf);
    rtos_printf("size of crop_buf %d \n", test);
+   
    //TODO: modify contents of input tensor using tripling to expand 80x80x1 to 80x80x3
 
    for (int i = 0; i < (80*80); i++) {
      for (int j = 0; j < 3; j++){
-       //rtos_printf("i %d\n", i);
-       //rtos_printf("j %d\n", j);
-       //rtos_printf("crop_buf[i] %d\n", crop_buf[i]);
-       feed_to_ai[3*i + j] = &crop_buf[i];
-       //rtos_printf("feed_to_ai[i] %d\n", feed_to_ai[3*i+j]);
+       input_tensor[3*i + j] = crop_buf[i];
       }
    }
 
@@ -169,7 +166,7 @@ static void person_detect_runner_rx(void *args) {
      rtos_printf("\nvalue of input_tensor[0] %d [1] %d", i);
    }
 */
-    xQueueSend(q, &feed_to_ai, portMAX_DELAY);
+    xQueueSend(q, &input_tensor, portMAX_DELAY);
   }
 }
 
