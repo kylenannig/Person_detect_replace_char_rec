@@ -62,14 +62,16 @@ static void person_detect_app_task(void *args) {
     /* img_buf[i%2] contains the values we want to pass to the ai task */
     for (int i = 0; i < (IMAGE_SIZE * 2); i++) {
       if ((i % 2)) {
-        ai_img_buf[i >> 1] = img_buf[i] ;                 //replace with thresholding statement                 
-        if (ai_img_buf[i] > 0x7F) {
-          ai_img_buf[i] = 0xFF;
+        ai_img_buf[i >> 1] = img_buf[i] ;                 //replace with thresholding statement               
+        if (ai_img_buf[i >> 1] > 0x7F) {
+          ai_img_buf[i >> 1] = 0xFF;
         }
         else {
-          ai_img_buf[i] = 0x00;
-        }                                                    //threshold 127 that will alwasy return 00 or ff
-     
+          ai_img_buf[i >> 1] = 0x00;
+        }   
+        //rtos_printf("ai_img_buf_value %d \n", ai_img_buf[i >> 1]);  
+                                                   //threshold 127 that will alwasy return 00 or ff
+        
       }
     }
     vPortFree(img_buf);
@@ -151,11 +153,11 @@ static void person_detect_runner_rx(void *args) {
 
    for (int i = 0; i < (80*80); i++) {
      for (int j = 0; j < 3; j++){
-       rtos_printf("i %d\n", i);
-       rtos_printf("j %d\n", j);
-       rtos_printf("crop_buf[i] %d\n", crop_buf[i]);
+       //rtos_printf("i %d\n", i);
+       //rtos_printf("j %d\n", j);
+       //rtos_printf("crop_buf[i] %d\n", crop_buf[i]);
        feed_to_ai[3*i + j] = crop_buf[i];
-       rtos_printf("feed_to_ai[i] %d\n", feed_to_ai[3*i+j]);
+       //rtos_printf("feed_to_ai[i] %d\n", feed_to_ai[3*i+j]);
       }
    }
 
