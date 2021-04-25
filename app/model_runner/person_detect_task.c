@@ -63,13 +63,13 @@ static void person_detect_app_task(void *args) {
     for (int i = 0; i < (IMAGE_SIZE * 2); i++) {
       if ((i % 2)) {
         ai_img_buf[i >> 1] = img_buf[i] ;                 //replace with thresholding statement                 
-        if (img_buf[i] > 0x7F) {
-          img_buf[i] = 0xFF;
+        if (ai_img_buf[i] > 0x7F) {
+          ai_img_buf[i] = 0xFF;
         }
         else {
-          img_buf[i] = 0x00;
-        }                                                    //turnary threshold 127 that will alwasy return 00 or ff
-      
+          ai_img_buf[i] = 0x00;
+        }                                                    //threshold 127 that will alwasy return 00 or ff
+     
       }
     }
     vPortFree(img_buf);
@@ -113,12 +113,18 @@ static void person_detect_runner_rx(void *args) {
   uint8_t *input_tensor;
   int input_tensor_len;
 
-  //Kyle: Defining new buffers for cropping
-  uint8_t crop_buf[80*80];
 
   //Kyle: defining row and column counting variables for cropping
   int column = 0;
   int row = 0;
+
+  //andrew test
+  int temp = 0x00;
+  int test = 0;
+
+  //kyle definining new arrays
+  uint8_t *feed_to_ai[80*80*3];
+  uint8_t crop_buf[80*80];
 
   while (1) {
     input_tensor_len = rtos_intertile_rx(adr->intertile_ctx, adr->port,
@@ -134,20 +140,38 @@ static void person_detect_runner_rx(void *args) {
       row++;}
       if(column<80 && row<80){
         crop_buf[i]= input_tensor[i];
+        rtos_printf("input-tensor %d\n", input_tensor[i]);
       }
       column++;
     }
 
-    //TODO: modify contents of input tensor using tripling to expand 80x80x1 to 80x80x3
+   test = sizeof(crop_buf);
+   rtos_printf("size of crop_buf %d \n", test);
+   //TODO: modify contents of input tensor using tripling to expand 80x80x1 to 80x80x3
+
    for (int i = 0; i < (80*80); i++) {
      for (int j = 0; j < 3; j++){
-       input_tensor[3*i + j] = crop_buf[i];
+       rtos_printf("i %d\n", i);
+       rtos_printf("j %d\n", j);
+       rtos_printf("crop_buf[i] %d\n", crop_buf[i]);
+       feed_to_ai[3*i + j] = crop_buf[i];
+       rtos_printf("feed_to_ai[i] %d\n", feed_to_ai[3*i+j]);
       }
    }
 
-    xQueueSend(q, &input_tensor, portMAX_DELAY);
+
+/*test
+   for (int i = 0; i < (96*96+10); i++) { 
+     input_tensor[i]=temp;
+     
+     rtos_printf("\nvalue of input_tensor[0] %d [1] %d", i);
+   }
+*/
+    xQueueSend(q, &feed_to_ai, portMAX_DELAY);
   }
 }
+
+
 
 static void person_detect_task_runner(void *args) {
   model_runner_args_t *targs = (model_runner_args_t *)args;
