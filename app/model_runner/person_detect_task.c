@@ -118,7 +118,7 @@ static void person_detect_app_task(void *args) {
     taskEXIT_CRITICAL();
 #endif
 
-    rtos_intertile_tx(adr->intertile_ctx, adr->port, ai_img_buf, IMAGE_SIZE);
+    rtos_intertile_tx(adr->intertile_ctx, adr->port, ai_img_buf, AI_IMAGE_SIZE);
     output_tensor_len = rtos_intertile_rx(
         adr->intertile_ctx, adr->port, (void **)&output_tensor, portMAX_DELAY);
     rtos_printf("\noutput_tensor [0] (0) %d  output_tensor [1] (1) %d  output_tensor [2] (2) %d  output_tensor [3] (3) %d  output_tensor [4] (4) %d\noutput_tensor [5] (5) %d  output_tensor [6] (6) %d  output_tensor [7] (7) %d  output_tensor [8] (8) %d  output_tensor [9] (9) %d\noutput_tensor[10] (A) %d  output_tensor[11] (B) %d  output_tensor[12] (C) %d  output_tensor[13] (D) %d  output_tensor[14] (E) %d\noutput_tensor[15] (F) %d  output_tensor[16] (G) %d  output_tensor[17] (H) %d  output_tensor[18] (I) %d  output_tensor[19] (J) %d\noutput_tensor[20] (K) %d  output_tensor[21] (L) %d  output_tensor[22] (M) %d  output_tensor[23] (N) %d  output_tensor[24] (o) %d\noutput_tensor[25] (P) %d  output_tensor[26] (Q) %d  output_tensor[27] (R) %d  output_tensor[28] (S) %d  output_tensor[29] (T) %d\noutput_tensor[30] (U) %d  output_tensor[31] (V) %d  output_tensor[32] (W) %d  output_tensor[33] (X) %d  output_tensor[34] (Y) %d\noutput_tensor[35] (Z) %d\n", output_tensor[0],
