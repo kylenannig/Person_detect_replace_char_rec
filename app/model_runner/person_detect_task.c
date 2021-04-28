@@ -62,49 +62,63 @@ static void person_detect_app_task(void *args) {
   rtos_gpio_port_enable(gpio_ctx, led_port);
   rtos_gpio_port_out(gpio_ctx, led_port, val);
 
+
+  //int test = 0;
+  //int test1 = 0;
+  int count = 0;
+
   while (1) {
     rtos_printf("Wait for next image...\n");
     xQueueReceive(input_queue, &img_buf, portMAX_DELAY);
 
     /* img_buf[i%2] contains the values we want to pass to the ai task */
+    //then inverted binarizer!
     for (int i = 0; i < (IMAGE_SIZE * 2); i++) {
       if ((i % 2)) {
         threshold_buf[i >> 1] = img_buf[i] ;  
-                                               //replace with thresholding statement               
+                                                //replace with thresholding statement               
         if (threshold_buf[i >> 1] > 0x7F) {       //threshold 127 that will alwasy return 00 or ff  
-          threshold_buf[i >> 1] = 0xFF;
+          threshold_buf[i >> 1] = 0x00;
         }
         else {
-          threshold_buf[i >> 1] = 0x00;
+          
+          threshold_buf[i >> 1] = 0xFF;
         }   
-        //rtos_printf("ai_img_buf_value %d \n", ai_img_buf[i >> 1]);  
+         
                                                     
       }
     }
-    //TODO: crop 96x96x1 to 80x80x1
+    //crop 96x96x1 to 80x80x1
     //Loop through every element, have counter counting rows and columns (calling them rows and columns 0 through 95)
     //k represents the row counter, j represents the column counter
     //if in first 80x80 gets included in crop_buf
-
+    
     for (int i = 0; i < (IMAGE_SIZE); i++) {
       if (column == 96){
       column=0;
       row++;}
       if(column<80 && row<80){
-        crop_buf[i]= threshold_buf[i];
-        //rtos_printf("input-tensor %d\n", input_tensor[i]);
+        crop_buf[count]= threshold_buf[i];
+        //rtos_printf("crop_buf[count] %d\n", crop_buf[count]);
+        count++;
       }
-      column++;
+      column++;  
     }
 
-   //TODO: modify contents of input tensor using tripling to expand 80x80x1 to 80x80x3
+//rtos_printf("count %d \n", count);
+//test1 = sizeof(crop_buf);  
+//rtos_printf("crop_buf size %d \n", test1);
+   //tripling to expand 80x80x1 to 80x80x3
 
    for (int i = 0; i < (AI_IMAGE_SIZE/3); i++) {
      for (int j = 0; j < 3; j++){
        ai_img_buf[3*i + j] = crop_buf[i];
-      
+       //rtos_printf("ai_img_buf[3*i+j] %d\n", ai_img_buf[3*i+j]);
       }
    }
+    
+    //test = sizeof(ai_img_buf);
+    //rtos_printf("size of ai_img_buf %d\n", test);
 
 
     vPortFree(img_buf);
@@ -127,7 +141,7 @@ static void person_detect_app_task(void *args) {
 #ifdef OUTPUT_IMAGE_STREAM
     taskENTER_CRITICAL(); 
     { 
-      xscope_bytes(OUTPUT_TENSOR, output_tensor_len,
+      xscope_bytes(OUTPUT_TENSOR, output_tensor_len, 
                    (const unsigned char *)output_tensor);
     }
     taskEXIT_CRITICAL();
