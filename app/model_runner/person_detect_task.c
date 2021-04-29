@@ -121,6 +121,11 @@ rtos_printf("\nThreshold Buffer: \n \n");
       }
       column++;  
     }
+
+    count = 0;
+    column = 0;
+    row = 0;
+
 //crop_buf visualizer, can comment out
 //
 
@@ -179,6 +184,7 @@ rtos_printf("\nCrop Buffer: \n \n");
 
 
     vPortFree(img_buf);
+  
 
 
 #ifdef OUTPUT_IMAGE_STREAM
