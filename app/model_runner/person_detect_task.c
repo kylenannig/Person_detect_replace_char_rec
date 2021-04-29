@@ -75,19 +75,36 @@ static void person_detect_app_task(void *args) {
     //then inverted binarizer!
     for (int i = 0; i < (IMAGE_SIZE * 2); i++) {
       if ((i % 2)) {
-        threshold_buf[i >> 1] = img_buf[i] ;  
-                                                //replace with thresholding statement               
-        if (threshold_buf[i >> 1] > 0x7F) {       //threshold 127 that will alwasy return 00 or ff  
-          threshold_buf[i >> 1] = 0x00;
+        threshold_buf[i >> 1] = img_buf[i] ;                                    //replace with thresholding statement               
+        if (threshold_buf[i >> 1] > 0x7F) {       //threshold 127. If lighter than gray turn black, else turn white
+          threshold_buf[i >> 1] = 0x00;           //turn black
         }
         else {
-          
-          threshold_buf[i >> 1] = 0xFF;
-        }   
-         
-                                                    
+          threshold_buf[i >> 1] = 0xFF;          //turn white
+        }                                           
       }
     }
+
+//visualize threshold_buf can comment out
+//
+rtos_printf("\nThreshold Buffer: \n \n");
+
+  for(int i = 0; i < (IMAGE_SIZE); i++){ 
+     if(i%96 == 0 && i != 0){
+      rtos_printf("\n");
+    }
+      if(threshold_buf[i]==255){
+        rtos_printf("1");                  //white==1, character(originally black) should be made up of ones at this stage
+      }
+      else if(threshold_buf[i]==0){
+        rtos_printf("0");                  //black
+      }
+      else {
+        rtos_printf("\nerror! threshold buf is %d\n", threshold_buf[i]);
+      }
+    }
+
+//
     //crop 96x96x1 to 80x80x1
     //Loop through every element, have counter counting rows and columns (calling them rows and columns 0 through 95)
     //k represents the row counter, j represents the column counter
@@ -104,7 +121,29 @@ static void person_detect_app_task(void *args) {
       }
       column++;  
     }
+//crop_buf visualizer, can comment out
+//
 
+rtos_printf("\nCrop Buffer: \n \n");
+
+  for(int i = 0; i < (AI_IMAGE_SIZE/3); i++){ 
+     if(i%80 == 0 && i != 0){
+      rtos_printf("\n");
+    }
+      if(crop_buf[i]==255){
+        rtos_printf("1");                  //white==1, character(originally black) should be made up of ones at this stage
+      }
+      else if(crop_buf[i]==0){
+        rtos_printf("0");                  //black
+      }
+      else {
+        rtos_printf("\nerror! crop buf is %d\n", threshold_buf[i]);
+      }
+    }
+
+  //
+
+ 
 //rtos_printf("count %d \n", count);
 //test1 = sizeof(crop_buf);  
 //rtos_printf("crop_buf size %d \n", test1);
@@ -113,10 +152,28 @@ static void person_detect_app_task(void *args) {
    for (int i = 0; i < (AI_IMAGE_SIZE/3); i++) {
      for (int j = 0; j < 3; j++){
        ai_img_buf[3*i + j] = crop_buf[i];
-       //rtos_printf("ai_img_buf[3*i+j] %d\n", ai_img_buf[3*i+j]);
       }
    }
-    
+
+   //ai_image_buf visualizer, will look wierd but shold be 80*3 x 80 after expanding
+   rtos_printf("\nAI Image Buffer: \n \n");
+     for(int i = 0; i < (AI_IMAGE_SIZE); i++){ 
+     if(i%(80*3) == 0 && i != 0){
+      rtos_printf("\n");
+    }
+      if(ai_img_buf[i]==255){
+        rtos_printf("1");                  //white==1, character(originally black) should be made up of ones at this stage
+      }
+      else if(ai_img_buf[i]==0){
+        rtos_printf("0");                  //black
+      }
+      else {
+        rtos_printf("\nerror! ai_img_buf is %d\n", threshold_buf[i]);
+      }
+    }
+
+
+
     //test = sizeof(ai_img_buf);
     //rtos_printf("size of ai_img_buf %d\n", test);
 
