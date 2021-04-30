@@ -4,7 +4,7 @@
 #ifndef PERSON_DETECT_MODEL_H_
 #define PERSON_DETECT_MODEL_H_
 
-extern unsigned char person_detect_model_data[];
+extern const unsigned char person_detect_model_data[];
 extern const int person_detect_model_len;
 
 #endif  // PERSON_DETECT_MODEL_H_

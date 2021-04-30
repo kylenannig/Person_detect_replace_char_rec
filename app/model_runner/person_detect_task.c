@@ -63,7 +63,7 @@ static void person_detect_app_task(void *args) {
   rtos_gpio_port_out(gpio_ctx, led_port, val);
 
 
-  //int test = 0;
+  int test = 0;
   //int test1 = 0;
   int count = 0;
 
@@ -86,7 +86,9 @@ static void person_detect_app_task(void *args) {
     }
 
 //visualize threshold_buf can comment out
-//
+
+/*
+
 rtos_printf("\nThreshold Buffer: \n \n");
 
   for(int i = 0; i < (IMAGE_SIZE); i++){ 
@@ -103,6 +105,8 @@ rtos_printf("\nThreshold Buffer: \n \n");
         rtos_printf("\nerror! threshold buf is %d\n", threshold_buf[i]);
       }
     }
+
+    */
 
 //
     //crop 96x96x1 to 80x80x1
@@ -127,8 +131,8 @@ rtos_printf("\nThreshold Buffer: \n \n");
     row = 0;
 
 //crop_buf visualizer, can comment out
-//
 
+/*
 rtos_printf("\nCrop Buffer: \n \n");
 
   for(int i = 0; i < (AI_IMAGE_SIZE/3); i++){ 
@@ -146,8 +150,8 @@ rtos_printf("\nCrop Buffer: \n \n");
       }
     }
 
-  //
-
+  
+*/
  
 //rtos_printf("count %d \n", count);
 //test1 = sizeof(crop_buf);  
@@ -161,6 +165,8 @@ rtos_printf("\nCrop Buffer: \n \n");
    }
 
    //ai_image_buf visualizer, will look wierd but shold be 80*3 x 80 after expanding
+/*
+   
    rtos_printf("\nAI Image Buffer: \n \n");
      for(int i = 0; i < (AI_IMAGE_SIZE); i++){ 
      if(i%(80*3) == 0 && i != 0){
@@ -176,8 +182,8 @@ rtos_printf("\nCrop Buffer: \n \n");
         rtos_printf("\nerror! ai_img_buf is %d\n", threshold_buf[i]);
       }
     }
-
-
+*/
+ 
 
     //test = sizeof(ai_img_buf);
     //rtos_printf("size of ai_img_buf %d\n", test);
@@ -190,7 +196,7 @@ rtos_printf("\nCrop Buffer: \n \n");
 #ifdef OUTPUT_IMAGE_STREAM
     taskENTER_CRITICAL();
     {
-      xscope_bytes(INPUT_IMAGE, AI_IMAGE_SIZE, (const unsigned char *)ai_img_buf);
+    xscope_bytes(INPUT_IMAGE, AI_IMAGE_SIZE, (const unsigned char *)ai_img_buf);
     }
     taskEXIT_CRITICAL();
 #endif
@@ -201,11 +207,18 @@ rtos_printf("\nCrop Buffer: \n \n");
     rtos_printf("\noutput_tensor [0] (0) %d  output_tensor [1] (1) %d  output_tensor [2] (2) %d  output_tensor [3] (3) %d  output_tensor [4] (4) %d\noutput_tensor [5] (5) %d  output_tensor [6] (6) %d  output_tensor [7] (7) %d  output_tensor [8] (8) %d  output_tensor [9] (9) %d\noutput_tensor[10] (A) %d  output_tensor[11] (B) %d  output_tensor[12] (C) %d  output_tensor[13] (D) %d  output_tensor[14] (E) %d\noutput_tensor[15] (F) %d  output_tensor[16] (G) %d  output_tensor[17] (H) %d  output_tensor[18] (I) %d  output_tensor[19] (J) %d\noutput_tensor[20] (K) %d  output_tensor[21] (L) %d  output_tensor[22] (M) %d  output_tensor[23] (N) %d  output_tensor[24] (o) %d\noutput_tensor[25] (P) %d  output_tensor[26] (Q) %d  output_tensor[27] (R) %d  output_tensor[28] (S) %d  output_tensor[29] (T) %d\noutput_tensor[30] (U) %d  output_tensor[31] (V) %d  output_tensor[32] (W) %d  output_tensor[33] (X) %d  output_tensor[34] (Y) %d\noutput_tensor[35] (Z) %d\n", output_tensor[0],
                 output_tensor[1], output_tensor[2], output_tensor[3], output_tensor[4], output_tensor[5], output_tensor[6], output_tensor[7], output_tensor[8], output_tensor[9], output_tensor[10], output_tensor[11], output_tensor[12], output_tensor[13], output_tensor[14], output_tensor[15], output_tensor[16], output_tensor[17], output_tensor[18], output_tensor[19], output_tensor[20], output_tensor[21], output_tensor[22], output_tensor[23], output_tensor[24], output_tensor[25], output_tensor[26], output_tensor[27], output_tensor[28], output_tensor[29], output_tensor[30], output_tensor[31], output_tensor[32], output_tensor[33], output_tensor[34], output_tensor[35]);
 
+
+  //test = sizeof(output_tensor[0]);
+  //rtos_printf("output tensor size of %d\n", test);
+  //rtos_printf("output tensor length %d\n", output_tensor_len);
+
+
+
 #ifdef OUTPUT_IMAGE_STREAM
     taskENTER_CRITICAL(); 
     { 
       xscope_bytes(OUTPUT_TENSOR, output_tensor_len, 
-                   (const unsigned char *)output_tensor);
+                   (const unsigned char *)output_tensor); 
     }
     taskEXIT_CRITICAL();
 #endif
